@@ -24,4 +24,8 @@ ANDROID_HOME/platform-tools/aapt
 
 jarsigner -verbose -keystore debug.keystore \
 -storepass password -keypass password -signedjar \
-bin/testapp.signed.apk bin/testapp.unsigned.apk testKey
+bin/testapp.signed.apk bin/testapp.unsigned.apk testKey.
+
+
+* aapt in path!
+* javac in path
