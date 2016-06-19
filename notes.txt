@@ -1,0 +1,27 @@
+1. Install android sdk
+2. platform is empty: android list targets
+javac -verbose -d obj -classpath /home/letter/Downloads/android-sdk-linux/platforms/android-24/android.jar:obj -sourcepath ./src src/xin/task/*.java
+
+
+ANDROID_HOME/platform-tools/aapt
+                        package
+                        -v
+                        -f
+                        -m
+                        -S DEV_HOME/res
+                        -J DEV_HOME/src
+                        -M DEV_HOME/AndroidManifest.xml
+                        -I ANDROID_HOME/platforms/android-7/android.jar
+
+
+                        letter@ubuntu:~/Downloads/play/bin$ keytool -genkeypair -validity 10000 -dname "CN=company name,
+                        OU=organisational unit,
+                        O=organisation,
+                        L=location,
+                        S=state,
+                        C=country code" -keystore ../debug.keystore -storepass password -keypass password -alias testKey -keyalg RSA -v
+
+
+jarsigner -verbose -keystore debug.keystore \
+-storepass password -keypass password -signedjar \
+bin/testapp.signed.apk bin/testapp.unsigned.apk testKey
