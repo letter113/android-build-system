@@ -51,5 +51,8 @@ def parse_args():
 
 def run():
     args = parse_args()
-    create_project(args.project_name, args.target_id, args.project_path,
-                   args.package_name, args.activity)
+    create_project(args.project_name,
+                   args.target_id,
+                   args.project_path,
+                   args.package_name,
+                   args.activity)

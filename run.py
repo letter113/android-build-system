@@ -1,6 +1,6 @@
 import sys
 
-from tasks import project_creation, compile, package
+from tasks import project_creation, compile, package, launch
 
 
 def main():
@@ -10,6 +10,8 @@ def main():
         compile.run()
     elif sys.argv[1] == "package":
         package.run()
+    elif sys.argv[1] == "launch":
+        launch.run()
     else:
         sys.exit("We don't know what to do with {}".format(sys.argv[1]))
 

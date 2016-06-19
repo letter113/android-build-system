@@ -16,7 +16,8 @@ def run():
     _create_keystore(keystore)
 
     for _, app in APP_PATH.items():
-        os.remove(app)
+        if os.path.isfile(app):
+            os.remove(app)
 
     _create_apk()
     _sign_apk(keystore)
