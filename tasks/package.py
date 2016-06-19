@@ -4,9 +4,20 @@ import os
 from .compile import get_android_jar_path
 
 
+APP_PATH = {
+    "unsigned": os.path.join("bin", "unsigned.apk"),
+    "signed": os.path.join("bin", "signed.apk"),
+    "zippped": os.path.join("bin", "final.apk")
+}
+
+
 def run():
     keystore="AndroidTest.keystore"
     _create_keystore(keystore)
+
+    for _, app in APP_PATH.items():
+        os.remove(app)
+
     _create_apk()
     _sign_apk(keystore)
     _zip_align_apk()
@@ -15,7 +26,7 @@ def run():
 def _create_keystore(keystore_path):
     if os.path.isfile(keystore_path):
         return
-
+    print("Generating keystore now")
     subprocess.call(
         ["keytool",
          "-genkeypair",
@@ -25,7 +36,7 @@ def _create_keystore(keystore_path):
          "-storepass", "password",
          "-keypass", "password",
          "-alias", "AndroidTestKey",
-         "-keyalg", "RSA"
+         "-keyalg", "RSA",
          "-v"],
         timeout=30
     )
@@ -35,12 +46,12 @@ def _create_apk():
     subprocess.call([
         "aapt",
         "package",
-        "-v"
+        "-v",
         "-f",
         "-M", "AndroidManifest.xml",
         "-S", "res",
         "-I", get_android_jar_path(),
-        "-F", os.path.join("bin", "unsigned.apk"),
+        "-F", APP_PATH["unsigned"],
         "bin"],
         timeout=30)
 
@@ -48,12 +59,12 @@ def _create_apk():
 def _sign_apk(keystore):
     subprocess.call([
         "jarsigner",
-        "-verbose"
+        "-verbose",
         "-keystore", "AndroidTest.keystore",
         "-storepass", "password",
         "-keypass", "password",
-        "-signedjar", os.path.join("bin", "signed.apk"),
-        os.path.join("bin", "unsigned.apk"),
+        "-signedjar", APP_PATH["signed"],
+        APP_PATH["unsigned"],
         "AndroidTestKey"],
         timeout=30
     )
@@ -63,7 +74,7 @@ def _zip_align_apk():
     subprocess.call([
         "zipalign",
         "-v",
-         "-f", "4",
-        os.path.join("bin", "signed.apk"),
-        os.path.join("bin", "final.apk")],
+        "-f", "4",
+        APP_PATH["signed"],
+        APP_PATH["zippped"]],
     timeout=30)
