@@ -5,17 +5,12 @@ import sys
 
 def run():
     ensure_at_project_dir()
-    api_level = get_api_level()
-    android_jar_path =os.path.join(
-             os.environ["ANDROID_HOME"],
-             "platforms",
-             "android-" + api_level,
-             "android.jar")
-    _create_R_file(api_level)
+    android_jar_path = get_android_jar_path()
+    _create_R_file(android_jar_path)
     _compile(android_jar_path)
 
 
-def _create_R_file(api_level):
+def _create_R_file(android_jar_path):
     subprocess.call(
         ["aapt",
          "package",
@@ -26,27 +21,33 @@ def _create_R_file(api_level):
          "res",
          "-J",
          "src",
-         "-M",
-         "AndroidManifest.xml",
-         "-I",
-         os.path.join(
-             os.environ["ANDROID_HOME"],
-             "platforms",
-             "android-" + api_level,
-             "android.jar")],
+         "-M", "AndroidManifest.xml",
+         "-I", android_jar_path],
         timeout=30
     )
 
 
+def _get_all_java_files():
+    java_files = []
+    for dirName, _, fileList in os.walk(os.getcwd()):
+        for fname in fileList:
+            _, ext = os.path.splitext(fname)
+            if ext == ".java":
+                java_files.append(os.path.join(dirName, fname))
+    print(java_files)
+    return java_files
+
 def _compile(android_jar_path):
     seq = ";" if sys.platform == "win32" else ":"
-    subprocess.call(
-        ["javac",
-         "-verbose"
+    call = ["javac",
+         "-verbose",
          "-d", "obj",
          "-classpath", android_jar_path + seq + "obj",
          "-sourcepath", "src",
-         "**/*.java"],
+         ] + _get_all_java_files()
+    print(call)
+    subprocess.call(
+        call,
         timeout=60
     )
 
@@ -58,9 +59,19 @@ def ensure_at_project_dir():
 def get_api_level():
     with open("project.properties") as handler:
         line = handler.readline()
-        if "target=" in line:
-            value = line.split("target=")[1]
-            if value.startswith("android-"):
-                return value.split("android-")[1]
-            return value.rsplit(":", maxsplit=1)[1]
+        while line:
+            if "target=" in line:
+                value = line.split("target=")[1]
+                if value.startswith("android-"):
+                    return value.split("android-")[1].strip()
+                return value.rsplit(":", maxsplit=1)[1].strip()
+            line = handler.readline()
     raise Exception("We can't understand project.properties")
+
+
+def get_android_jar_path():
+    return os.path.join(
+         os.environ["ANDROID_HOME"],
+         "platforms",
+         "android-" + get_api_level(),
+         "android.jar")

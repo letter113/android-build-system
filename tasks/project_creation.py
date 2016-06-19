@@ -20,6 +20,7 @@ def create_project(project_name, target_id, project_path, package_name, activity
                      activity_class_name
                      ],
                     timeout=30)
+    os.mkdir(os.path.join(project_path, "obj"))
 
 
 def parse_args():

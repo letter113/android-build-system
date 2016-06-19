@@ -29,3 +29,6 @@ bin/testapp.signed.apk bin/testapp.unsigned.apk testKey.
 
 * aapt in path!
 * javac in path
+* keytool in path!
+* jarsigner in path
+* adb found either in path or android_home/platform_tools
