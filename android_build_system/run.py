@@ -7,16 +7,20 @@ from android_build_system.tasks import project_creation, compile, launch, packag
 from android_build_system.pre_checks.env_check import (
     EnvCheck, AAPTCheck, ZIPALIGNCheck, CmdCheck)
 
+
 def pre_check():
     print("Doing some pre-check now...")
 
     if all([
         EnvCheck().check(),
         AAPTCheck().check(),
-        ZIPALIGNCheck().check(),
-        CmdCheck("javac").check(),
-        CmdCheck("keytool").check(),
-        CmdCheck("jarsigner").check()
+        ZIPALIGNCheck().check()
+    ] + [
+        CmdCheck(cmd).check() for cmd in [
+            "javac",
+            "keytool",
+            "jarsigner",
+            "adb"]
     ]):
         print("All check passed [OK]")
     else:
@@ -31,6 +35,7 @@ def _print_help():
             "package: run this at the root of your project and make .apk\n"
             "launch: run this at the root of your project and launch your apk in the emulator\n"
         )
+
 
 def main():
     pre_check()

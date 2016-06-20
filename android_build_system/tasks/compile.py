@@ -3,7 +3,7 @@ import sys
 
 
 from android_build_system.config import AAPT
-from android_build_system.utils import run_cmd
+from android_build_system.utils import run_cmd, ensure_at_project_dir
 
 
 def run():
@@ -40,21 +40,17 @@ def _get_all_java_files():
 
 def _compile(android_jar_path):
     seq = ";" if sys.platform == "win32" else ":"
-    call = ["javac",
-         "-verbose",
-         "-d", "obj",
-         "-classpath", android_jar_path + seq + "obj",
-         "-sourcepath", "android_build_system",
-         ] + _get_all_java_files()
+    call = [
+        "javac",
+        "-verbose",
+        "-d", "obj",
+        "-classpath", android_jar_path + seq + "obj",
+        "-sourcepath", "android_build_system",
+    ] + _get_all_java_files()
     run_cmd(
         call,
         timeout=60
     )
-
-
-def ensure_at_project_dir():
-    if not os.path.isfile("project.properties"):
-        sys.exit("We could not locate project.properties, are you at the root of a project?")
 
 
 def get_api_level():

@@ -3,7 +3,7 @@ import os
 
 from android_build_system.tasks.compile import get_android_jar_path
 from android_build_system.config import AAPT, ZIPALIGN
-from android_build_system.utils import run_cmd
+from android_build_system.utils import run_cmd, ensure_at_project_dir
 
 
 APP_PATH = {
@@ -14,6 +14,7 @@ APP_PATH = {
 
 
 def run():
+    ensure_at_project_dir()
     keystore="AndroidTest.keystore"
     _create_keystore(keystore)
 
