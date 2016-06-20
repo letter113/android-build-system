@@ -1,6 +1,4 @@
 import sys
-import os
-import shutil
 
 from android_build_system.tasks import project_creation, compile, launch, package
 
