@@ -29,7 +29,7 @@ def run():
 def _create_keystore(keystore_path):
     if os.path.isfile(keystore_path):
         return
-    print("Generating keystore now")
+    print("##Generating keystore now....")
     run_cmd(
         ["keytool",
          "-genkeypair",

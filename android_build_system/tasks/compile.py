@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 
@@ -36,7 +35,6 @@ def _get_all_java_files():
             _, ext = os.path.splitext(fname)
             if ext == ".java":
                 java_files.append(os.path.join(dirName, fname))
-    print(java_files)
     return java_files
 
 
@@ -48,15 +46,15 @@ def _compile(android_jar_path):
          "-classpath", android_jar_path + seq + "obj",
          "-sourcepath", "android_build_system",
          ] + _get_all_java_files()
-    print(call)
-    subprocess.call(
+    run_cmd(
         call,
         timeout=60
     )
 
 
 def ensure_at_project_dir():
-    pass
+    if not os.path.isfile("project.properties"):
+        sys.exit("We could not locate project.properties, are you at the root of a project?")
 
 
 def get_api_level():
