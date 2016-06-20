@@ -1,6 +1,6 @@
 import sys
 
-from tasks import project_creation, compile, package, launch
+from android_build_system.tasks import project_creation, compile, launch, package
 
 
 def main():

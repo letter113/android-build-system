@@ -20,7 +20,7 @@ def _create_R_file(android_jar_path):
          "-S",
          "res",
          "-J",
-         "src",
+         "android_build_system",
          "-M", "AndroidManifest.xml",
          "-I", android_jar_path],
         timeout=30
@@ -43,7 +43,7 @@ def _compile(android_jar_path):
          "-verbose",
          "-d", "obj",
          "-classpath", android_jar_path + seq + "obj",
-         "-sourcepath", "src",
+         "-sourcepath", "android_build_system",
          ] + _get_all_java_files()
     print(call)
     subprocess.call(
