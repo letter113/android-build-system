@@ -3,29 +3,41 @@ import os
 import shutil
 
 from android_build_system.tasks import project_creation, compile, launch, package
-from android_build_system.config import AAPT, ZIPALIGN
 
+from android_build_system.pre_checks.env_check import (
+    EnvCheck, AAPTCheck, ZIPALIGNCheck, CmdCheck)
 
 def pre_check():
-    print("## Doing some pre-check now...")
-    if not AAPT:
-        sys.exit("We could not find aapt in path or under %ANDROID_HOME%")
-    if not ZIPALIGN:
-        sys.exit("We could not find aapt in path or under %ANDROID_HOME%")
+    print("Doing some pre-check now...")
 
-    for env in ["JAVA_HOME", "ANDROID_HOME"]:
-        if not os.environ.get(env):
-            sys.exit("{} is not defined as system environment".format(env))
+    if all([
+        EnvCheck().check(),
+        AAPTCheck().check(),
+        ZIPALIGNCheck().check(),
+        CmdCheck("javac").check(),
+        CmdCheck("keytool").check(),
+        CmdCheck("jarsigner").check()
+    ]):
+        print("All check passed [OK]")
+    else:
+        sys.exit("Not all requirements met.")
 
-    for exe in ["javac", "keytool", "jarsigner"]:
-        if not shutil.which(exe):
-            sys.exit("{} is not in system path".format(exe))
 
-    print("## All check passed")
-
+def _print_help():
+    print(
+            "\nusage:\n"
+            "create: create a new project\n"
+            "compile: run this at the root of your project and compile it\n"
+            "package: run this at the root of your project and make .apk\n"
+            "launch: run this at the root of your project and launch your apk in the emulator\n"
+        )
 
 def main():
     pre_check()
+
+    if len(sys.argv) == 1:
+        _print_help()
+        return
 
     if sys.argv[1] == "create":
         project_creation.run()
@@ -36,13 +48,7 @@ def main():
     elif sys.argv[1] == "launch":
         launch.run()
     elif sys.argv[1] == "help":
-        print(
-            "usage:\n"
-            "create: create a new project\n"
-            "compile: run this at the root of your project and compile it\n"
-            "package: run this at the root of your project and make .apk\n"
-            "launch: run this at the root of your project and launch your apk in the emulator\n"
-        )
+        _print_help()
     else:
         sys.exit("We don't know what to do with {},"
                  " please type help for supported command".format(sys.argv[1]))

@@ -6,7 +6,11 @@ setup(
     version='0.1.0',
     author='Xin He',
     author_email='letter113@hotmail.com',
-    packages=['android_build_system', os.path.join('android_build_system', 'tasks')],
+    packages=[
+        'android_build_system',
+        os.path.join('android_build_system', 'tasks'),
+        os.path.join('android_build_system', 'pre_checks')
+    ],
     scripts=['android_build_system/run.py'],
     license='LICENSE',
     entry_points={
