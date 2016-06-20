@@ -3,6 +3,10 @@ import os
 import sys
 
 
+from android_build_system.config import AAPT
+from android_build_system.utils import run_cmd
+
+
 def run():
     ensure_at_project_dir()
     android_jar_path = get_android_jar_path()
@@ -11,16 +15,14 @@ def run():
 
 
 def _create_R_file(android_jar_path):
-    subprocess.call(
-        ["aapt",
+    run_cmd(
+        [AAPT,
          "package",
          "-v",
          "-f",
          "-m",
-         "-S",
-         "res",
-         "-J",
-         "android_build_system",
+         "-S", "res",
+         "-J", "src",
          "-M", "AndroidManifest.xml",
          "-I", android_jar_path],
         timeout=30
@@ -36,6 +38,7 @@ def _get_all_java_files():
                 java_files.append(os.path.join(dirName, fname))
     print(java_files)
     return java_files
+
 
 def _compile(android_jar_path):
     seq = ";" if sys.platform == "win32" else ":"

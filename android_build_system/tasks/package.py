@@ -1,7 +1,9 @@
 import subprocess
 import os
 
-from .compile import get_android_jar_path
+from android_build_system.tasks.compile import get_android_jar_path
+from android_build_system.config import AAPT, ZIPALIGN
+from android_build_system.utils import run_cmd
 
 
 APP_PATH = {
@@ -28,7 +30,7 @@ def _create_keystore(keystore_path):
     if os.path.isfile(keystore_path):
         return
     print("Generating keystore now")
-    subprocess.call(
+    run_cmd(
         ["keytool",
          "-genkeypair",
          "-validity", "10000",
@@ -44,8 +46,8 @@ def _create_keystore(keystore_path):
 
 
 def _create_apk():
-    subprocess.call([
-        "aapt",
+    run_cmd([
+        AAPT,
         "package",
         "-v",
         "-f",
@@ -58,7 +60,7 @@ def _create_apk():
 
 
 def _sign_apk(keystore):
-    subprocess.call([
+    run_cmd([
         "jarsigner",
         "-verbose",
         "-keystore", "AndroidTest.keystore",
@@ -72,8 +74,8 @@ def _sign_apk(keystore):
 
 
 def _zip_align_apk():
-    subprocess.call([
-        "zipalign",
+   run_cmd([
+        ZIPALIGN,
         "-v",
         "-f", "4",
         APP_PATH["signed"],

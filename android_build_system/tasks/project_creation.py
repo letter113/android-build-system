@@ -1,25 +1,32 @@
 import argparse
-import subprocess
 import sys
 import os
 
 
+from android_build_system.utils import run_cmd
+from android_build_system.config import ANDROID_CMD
+
+
 def create_project(project_name, target_id, project_path, package_name, activity_class_name):
-    subprocess.call([os.path.join(os.environ["ANDROID_HOME"], "tools", "android"),
-                     "create",
-                     "project",
-                     "-n",
-                     project_name,
-                     "-t",
-                     str(target_id),
-                     "-p",
-                     project_path,
-                    "-k",
-                    package_name,
-                     "-a",
-                     activity_class_name
-                     ],
-                    timeout=30)
+    if os.path.exists(project_path):
+        sys.exit(project_path + " already exit, please specify another path")
+
+    run_cmd([
+        ANDROID_CMD,
+        "create",
+        "project",
+        "-n",
+        project_name,
+        "-t",
+        str(target_id),
+        "-p",
+        project_path,
+        "-k",
+        package_name,
+        "-a",
+        activity_class_name
+        ],
+        timeout=30)
     os.mkdir(os.path.join(project_path, "obj"))
 
 
