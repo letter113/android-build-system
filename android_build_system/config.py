@@ -8,7 +8,7 @@ ANDROID_EXE = "android.bat" if sys.platform == "win32" else "android"
 ANDROID_CMD = os.path.join(os.environ.get("ANDROID_HOME", ""), "tools", ANDROID_EXE)
 AAPT_EXE = "aapt.exe" if sys.platform == "win32" else "aapt"
 ZIPALIGN_EXE = "zipalign.exe" if sys.platform == "win32" else "zipalign"
-
+PROJECT_BUILD_CONFIG = "build_config.json"
 
 def get_exe(exe_name):
     cmd = shutil.which(exe_name)

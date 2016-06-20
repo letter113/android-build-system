@@ -1,10 +1,10 @@
 import argparse
 import sys
 import os
-
+import json
 
 from android_build_system.utils import run_cmd
-from android_build_system.config import ANDROID_CMD
+from android_build_system.config import ANDROID_CMD, PROJECT_BUILD_CONFIG
 
 
 def create_project(project_name, target_id, project_path, package_name, activity_class_name):
@@ -28,6 +28,7 @@ def create_project(project_name, target_id, project_path, package_name, activity
         ],
         timeout=30)
     os.mkdir(os.path.join(project_path, "obj"))
+    generate_empty_build_config(project_path)
 
 
 def parse_args():
@@ -54,6 +55,18 @@ def parse_args():
                         help="Name of the default Activity that is created.")
 
     return parser.parse_args(sys.argv[2:])
+
+
+def generate_empty_build_config(project_path):
+    configs = {}
+    for step in ["compile", "package", "launch"]:
+        configs[step] = {
+            "pre": [],
+            "after": []
+    }
+    print("Creating a empty config file {}".format(PROJECT_BUILD_CONFIG))
+    with open(os.path.join(project_path, PROJECT_BUILD_CONFIG), "w") as handler:
+        json.dump(configs, handler, sort_keys=True, indent=4)
 
 
 def run():

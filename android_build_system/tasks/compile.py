@@ -3,15 +3,16 @@ import sys
 
 
 from android_build_system.config import AAPT
-from android_build_system.utils import run_cmd, ensure_at_project_dir
+from android_build_system.utils import run_cmd, ensure_at_project_dir, run_pre, run_after
 
 
 def run():
     ensure_at_project_dir()
+    run_pre("compile")
     android_jar_path = get_android_jar_path()
     _create_R_file(android_jar_path)
     _compile(android_jar_path)
-
+    run_after("compile")
 
 def _create_R_file(android_jar_path):
     run_cmd(

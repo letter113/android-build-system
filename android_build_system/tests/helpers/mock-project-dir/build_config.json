@@ -1,0 +1,14 @@
+{
+    "compile": {
+        "after": ["ls", "zip -h"],
+        "pre": []
+    },
+    "launch": {
+        "after": ["touch ss"],
+        "pre": []
+    },
+    "package": {
+        "after": [],
+        "pre": ["touch sss"]
+    }
+}

@@ -1,9 +1,8 @@
-import subprocess
 import os
 
 from android_build_system.tasks.compile import get_android_jar_path
 from android_build_system.config import AAPT, ZIPALIGN
-from android_build_system.utils import run_cmd, ensure_at_project_dir
+from android_build_system.utils import run_cmd, ensure_at_project_dir, run_pre, run_after
 
 
 APP_PATH = {
@@ -15,6 +14,7 @@ APP_PATH = {
 
 def run():
     ensure_at_project_dir()
+    run_pre("package")
     keystore="AndroidTest.keystore"
     _create_keystore(keystore)
 
@@ -25,6 +25,7 @@ def run():
     _create_apk()
     _sign_apk(keystore)
     _zip_align_apk()
+    run_after("package")
 
 
 def _create_keystore(keystore_path):
