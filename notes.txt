@@ -1,7 +1,0 @@
-1. Install android sdk
-2. platform is empty: android list targets
-* aapt in path or android_home/build_tools/<version>/
-* javac in path
-* keytool in path!
-* jarsigner in path
-* adb found either in path or android_home/platform_tools
