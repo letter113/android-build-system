@@ -5,9 +5,9 @@
     * Prerequisites:
     
         * JDK is installed
-            You can get them via
+            - You can get them via
             http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-            After installation, please make sure the bin folder is in system path, you can do a
+            - After installation, please make sure the bin folder is in system path, you can do a
             'java' to check that
     
         * Android SDK installed
@@ -23,7 +23,7 @@
             - select some system images to install and make sure 'android list target' is not empty
         
         * Add "adb" to system path
-         it should be under ANDROID_HOME/platform-tools
+            - it should be under ANDROID_HOME/platform-tools
   
         * Python 33 (32 bit version) is installed
             - You can get it via https://www.python.org/downloads/release/python-335/
