@@ -1,4 +1,3 @@
-import subprocess
 import os
 
 from android_build_system.tasks.compile import get_android_jar_path
